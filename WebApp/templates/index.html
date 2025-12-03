@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Severity Predictor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #f5f6fa; margin: 0; padding: 0; }
+        .container { display: flex; flex-wrap: wrap; max-width: 1000px; margin: 40px auto; background: #fff; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .content-box { flex: 1 1 500px; padding: 30px; }
+        .title { font-size: 28px; font-weight: 700; margin-bottom: 10px; }
+        .subtitle { font-size: 16px; margin-bottom: 20px; color: #555; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 5px; font-weight: 500; }
+        .form-input, select { width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ccc; }
+        .submit-button { padding: 10px 20px; background: #3498db; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        .submit-button:hover { background: #2980b9; }
+        .prediction-result { margin-top: 20px; font-size: 18px; font-weight: 600; }
+        .image-container { flex: 1 1 400px; padding: 20px; text-align: center; }
+        .image-container img { max-width: 100%; border-radius: 10px; }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="content-box">
+            <h1 class="title">Traffic Severity Predictor</h1>
+            <p class="subtitle">Fill in the details below to predict traffic severity:</p>
+
+            <form method="POST" class="prediction-form">
+
+                <div class="input-group">
+                    <label>Year</label>
+                    <input type="number" name="Year" class="form-input"  required>
+                </div>
+
+                <div class="input-group">
+                    <label>Start Latitude</label>
+                    <input type="number" step="0.0001" name="Start_Lat" class="form-input"  required>
+                </div>
+
+                <div class="input-group">
+                    <label>Start Longitude</label>
+                    <input type="number" step="0.0001" name="Start_Lng" class="form-input"  required>
+                </div>
+
+                <div class="input-group">
+                    <label>Distance (mi)</label>
+                    <input type="number" step="0.01" name="Distance(mi)" class="form-input" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Street</label>
+                    <input type="text" name="Street" class="form-input" required>
+                </div>
+
+                <div class="input-group">
+                    <label>City</label>
+                    <input type="text" name="City" class="form-input" required>
+                </div>
+
+                <div class="input-group">
+                    <label>County</label>
+                    <input type="text" name="County" class="form-input" required>
+                </div>
+
+                <div class="input-group">
+                    <label>State</label>
+                    <input type="text" name="State" class="form-input" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Airport Code</label>
+                    <input type="text" name="Airport_Code" class="form-input" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Temperature (F)</label>
+                    <input type="number" step="0.1" name="Temperature(F)" class="form-input" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Wind Chill (F)</label>
+                    <input type="number" step="0.1" name="Wind_Chill(F)" class="form-input" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Visibility (mi)</label>
+                    <input type="number" step="0.01" name="Visibility(mi)" class="form-input" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Wind Direction</label>
+                    <select name="Wind_Direction" class="form-input" required>
+                        <option value="">Select</option>
+                        <option value="N">N</option>
+                        <option value="S">S</option>
+                        <option value="E">E</option>
+                        <option value="W">W</option>
+                        <option value="NE">NE</option>
+                        <option value="NW">NW</option>
+                        <option value="SE">SE</option>
+                        <option value="SW">SW</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Weather Condition</label>
+                    <select name="Weather_Condition" class="form-input" required>
+                        <option value="">Select</option>
+                        <option value="Clear">Clear</option>
+                        <option value="Rain">Rain</option>
+                        <option value="Snow">Snow</option>
+                        <option value="Fog">Fog</option>
+                        <option value="Thunderstorm">Thunderstorm</option>
+                        <option value="Cloudy">Cloudy</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Traffic Signal (0 or 1)</label>
+                    <input type="number" min="0" max="1" name="Traffic_Signal" class="form-input" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Sunrise/Sunset (0=Sunrise, 1=Sunset)</label>
+                    <input type="number" min="0" max="1" name="Sunrise_Sunset" class="form-input" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Time Difference</label>
+                    <input type="number" step="0.01" name="TimeDiff" class="form-input" value="0" required>
+                </div>
+
+                <input type="submit" value="Predict Severity" class="submit-button">
+            </form>
+
+            {% if prediction %}
+                <div class="prediction-result">
+                    <pre>{{ prediction }}</pre>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="image-container">
+            <img src="{{ url_for('static', filename='car.png') }}" alt="Traffic">
+        </div>
+    </div>
+</body>
+</html>
